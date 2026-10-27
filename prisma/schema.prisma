@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  VIEWER
+}
+
+enum AccountClassification {
+  ASSET
+  CONTRA_ASSET
+  LIABILITY
+  OWNERS_EQUITY
+  CONTRA_EQUITY
+  REVENUE
+  EXPENSE
+}
+
+enum JournalStatus {
+  DRAFT
+  POSTED
+}
+
+enum EntryType {
+  REGULAR
+  REVERSAL
+  ADJUSTING
+}
+
+model User {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  name          String?
+  passwordHash  String
+  role          UserRole    @default(VIEWER)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  journalEntries JournalEntry[]
+  settings       AppSetting?
+  resetLogs      DataResetLog[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model AppSetting {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currency      String   @default("PHP")
+  companyName   String   @default("AAA Computer Services")
+  baseCurrencySymbol String @default("₱")
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Account {
+  id                String                   @id @default(uuid())
+  accountNo         String                   @unique
+  name              String
+  classification    AccountClassification
+  normalBalance     String                   @default("DEBIT") // DEBIT or CREDIT
+  description       String?
+  isActive          Boolean                  @default(true)
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+
+  lines             JournalLine[]
+
+  @@index([accountNo])
+  @@index([classification])
+  @@index([isActive])
+}
+
+model JournalEntry {
+  id                String         @id @default(uuid())
+  referenceNo       String?     @unique
+  date              DateTime
+  description       String
+  status            JournalStatus  @default(DRAFT)
+  entryType         EntryType      @default(REGULAR)
+  reversedFromId    String?
+  reversedFrom      JournalEntry?  @relation("Reversal", fields: [reversedFromId], references: [id])
+  reversals         JournalEntry[] @relation("Reversal")
+  lines             JournalLine[]
+  createdById       String?
+  createdBy         User?          @relation(fields: [createdById], references: [id])
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  @@index([status])
+  @@index([date])
+  @@index([referenceNo])
+  @@index([entryType])
+  @@index([reversedFromId])
+}
+
+model JournalLine {
+  id                String      @id @default(uuid())
+  journalEntryId    String
+  journalEntry      JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  accountId         String
+  account           Account     @relation(fields: [accountId], references: [id])
+  debit             Decimal
+  credit            Decimal
+  description       String?
+  lineNo            Int         @default(0)
+
+  @@index([journalEntryId])
+  @@index([accountId])
+  @@index([accountId, journalEntryId])
+}
+
+model DataResetLog {
+  id        String   @id @default(uuid())
+  action    String   // SEED_SAMPLE, CLEAR_ALL, etc.
+  performedById String?
+  performedBy User?  @relation(fields: [performedById], references: [id])
+  performedAt DateTime @default(now())
+  details     String?
+}
