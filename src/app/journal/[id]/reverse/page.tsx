@@ -40,26 +40,26 @@ export default function ReverseEntryPage({ params }: { params: Promise<{ id: str
   if (loading) {
     return (
       <div className="p-8 flex flex-col items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <p className="mt-3 text-slate-600">Loading...</p>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#A9C4A1]"></div>
+        <p className="mt-3 text-[#A1A1AA]">Loading...</p>
       </div>
     );
   }
 
   if (error || !entry) {
     return (
-      <div className="p-6 bg-white rounded-lg border border-red-200 text-red-700">
+      <div className="p-6 bg-[#1E1E1E] rounded-lg border border-[#F87171]/30 text-[#F3F4F6]">
         <h2 className="text-lg font-semibold mb-2">Entry not found</h2>
-        <p>{error}</p>
+        <p className="text-[#A1A1AA]">{error}</p>
       </div>
     );
   }
 
   if (entry.status !== "POSTED") {
     return (
-      <div className="p-6 bg-white rounded-lg border border-amber-200 text-amber-700">
+      <div className="p-6 bg-[#1E1E1E] rounded-lg border border-[#FBBF24]/30 text-[#FBBF24]">
         <h2 className="text-lg font-semibold mb-2">Cannot reverse</h2>
-        <p>Only posted entries can be reversed. This entry is a draft.</p>
+        <p className="text-[#A1A1AA]">Only posted entries can be reversed. This entry is a draft.</p>
       </div>
     );
   }
@@ -99,44 +99,44 @@ export default function ReverseEntryPage({ params }: { params: Promise<{ id: str
 
   return (
     <div className="max-w-2xl space-y-6">
-      <div className="bg-white rounded-lg border border-slate-200 p-6">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">Reverse Journal Entry</h1>
-        <p className="text-slate-600 mb-4">
+      <div className="bg-[#1E1E1E] rounded-lg border border-[#303030] p-6">
+        <h1 className="text-2xl font-bold text-[#F3F4F6] mb-2">Reverse Journal Entry</h1>
+        <p className="text-[#A1A1AA] mb-4">
           Reversing creates a new entry with opposite debits and credits. The
           original entry stays posted for audit purposes.
         </p>
 
-        <div className="bg-slate-50 rounded-lg p-4 border border-slate-200 mb-6">
-          <h3 className="text-sm font-semibold text-slate-900 mb-3">Original Entry</h3>
+        <div className="bg-[#141414] rounded-lg p-4 border border-[#303030] mb-6">
+          <h3 className="text-sm font-semibold text-[#F3F4F6] mb-3">Original Entry</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-slate-500">Reference:</span>
-              <span className="font-mono text-slate-800">{entry.referenceNo}</span>
+              <span className="text-[#A1A1AA]/50">Reference:</span>
+              <span className="font-mono text-[#F3F4F6]">{entry.referenceNo}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Date:</span>
-              <span className="text-slate-800">
+              <span className="text-[#A1A1AA]/50">Date:</span>
+              <span className="text-[#F3F4F6]">
                 {new Date(entry.date).toLocaleDateString()}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Description:</span>
-              <span className="text-slate-800">{entry.description}</span>
+              <span className="text-[#A1A1AA]/50">Description:</span>
+              <span className="text-[#F3F4F6]">{entry.description}</span>
             </div>
-            <div className="flex justify-between pt-2 border-t border-slate-100">
-              <span className="text-slate-500">Total Debits:</span>
-              <span className="font-mono text-slate-800">₱{totalDebits.toFixed(2)}</span>
+            <div className="flex justify-between pt-2 border-t border-[#303030]">
+              <span className="text-[#A1A1AA]/50">Total Debits:</span>
+              <span className="font-mono text-[#F3F4F6]">₱{totalDebits.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Total Credits:</span>
-              <span className="font-mono text-slate-800">₱{totalCredits.toFixed(2)}</span>
+              <span className="text-[#A1A1AA]/50">Total Credits:</span>
+              <span className="font-mono text-[#F3F4F6]">₱{totalCredits.toFixed(2)}</span>
             </div>
           </div>
         </div>
 
         <form onSubmit={handleReverse} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-[#A1A1AA] mb-1">
               Reversal Date
             </label>
             <input
@@ -144,12 +144,12 @@ export default function ReverseEntryPage({ params }: { params: Promise<{ id: str
               value={reversalDate}
               onChange={(e) => setReversalDate(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-[#A1A1AA] mb-1">
               Description (optional)
             </label>
             <textarea
@@ -157,11 +157,11 @@ export default function ReverseEntryPage({ params }: { params: Promise<{ id: str
               onChange={(e) => setReversalDescription(e.target.value)}
               rows={3}
               placeholder="e.g. Reversing accrued salaries at month start"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
             />
           </div>
 
-          <div className="bg-amber-50 rounded-lg p-3 border border-amber-200 text-amber-800 text-sm">
+          <div className="bg-[#FBBF24]/20 rounded-lg p-3 border border-[#FBBF24]/30 text-[#FBBF24] text-sm">
             <p className="font-semibold mb-1">What happens when you reverse:</p>
             <ul className="list-disc pl-5 space-y-1">
               <li>A new entry is created with debits and credits swapped.</li>
@@ -174,7 +174,7 @@ export default function ReverseEntryPage({ params }: { params: Promise<{ id: str
           <button
             type="submit"
             disabled={submitting}
-            className="w-full px-4 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+            className="w-full px-4 py-2.5 bg-[#F87171] text-[#F3F4F6] font-semibold rounded-lg hover:bg-[#FCA5A5] disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
           >
             <RotateCcw className="w-4 h-4" />
             {submitting ? "Reversing..." : "Create Reversal Entry"}
@@ -183,7 +183,7 @@ export default function ReverseEntryPage({ params }: { params: Promise<{ id: str
       </div>
 
       {error && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+        <div className="p-4 rounded-lg border border-[#F87171]/30 bg-[#F87171]/10 text-[#F87171] text-sm">
           <AlertCircle className="w-4 h-4 mr-2" />
           {error}
         </div>

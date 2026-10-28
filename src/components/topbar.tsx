@@ -1,16 +1,16 @@
 "use client";
 
 import { useAuth } from "@/components/providers";
-import { Sun, Moon, Monitor, Smartphone } from "lucide-react";
+import { Monitor } from "lucide-react";
 
 export function Topbar() {
-  const { user, mode, setMode, logout } = useAuth();
+  const { user, mode, setMode } = useAuth();
 
   return (
-    <header className="h-16 border-b border-slate-200 bg-white/80 backdrop-blur flex items-center justify-between px-6 sticky top-0 z-30">
+    <header className="h-16 border-b border-[#303030] bg-[#141414]/80 backdrop-blur flex items-center justify-between px-6 sticky top-0 z-30">
       <div className="flex items-center gap-4">
-        <h1 className="text-lg font-semibold text-slate-800">AAA Computer Services</h1>
-        <span className="px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
+        <h1 className="text-lg font-semibold text-[#F3F4F6]">AAA Computer Services</h1>
+        <span className="px-2 py-0.5 rounded text-xs font-medium bg-[#4A4E69] text-[#A9C4A1] border border-[#303030]">
           Accounting System
         </span>
       </div>
@@ -18,18 +18,22 @@ export function Topbar() {
       <div className="flex items-center gap-3">
         <button
           onClick={() => setMode(mode === "BEGINNER" ? "EXPERIENCED" : "BEGINNER")}
-          className="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 bg-slate-100 border border-slate-200 hover:bg-slate-200 transition-colors flex items-center gap-2"
+          className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+            mode === "BEGINNER"
+              ? "text-[#A9C4A1] bg-[#4A4E69]/20 border border-[#4A4E69]/30"
+              : "text-[#A1A1AA] bg-[#1E1E1E] border border-[#303030]"
+          }`}
           title="Switch accounting mode"
         >
           <Monitor className="w-4 h-4" />
-          {mode === "BEGINNER" ? "Experienced Mode" : "Beginner Mode"}
+          {mode === "BEGINNER" ? "Switch to Experienced Mode" : "Switch to Beginner Mode"}
         </button>
 
-        <div className="h-6 w-px bg-slate-300 mx-1"></div>
+        <div className="h-6 w-px bg-[#303030] mx-1"></div>
 
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 bg-slate-50 border border-slate-200">
-          <span className="hidden sm:inline">{user?.email}</span>
-          <span className="text-xs bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-[#A1A1AA] bg-[#1E1E1E] border border-[#303030]">
+          <span className="hidden sm:inline text-[#F3F4F6]">{user?.email}</span>
+          <span className="text-xs text-[#A9C4A1] bg-[#4A4E69]/20 px-1.5 py-0.5 rounded border border-[#4A4E69]/30">
             {user?.role}
           </span>
         </div>

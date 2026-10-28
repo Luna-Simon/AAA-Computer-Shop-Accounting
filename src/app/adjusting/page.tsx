@@ -4,16 +4,29 @@ export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/providers";
-import { Calculator, AlertCircle, CheckCircle, Save, Info } from "lucide-react";
+import { Calculator, AlertCircle, CheckCircle, Save, Info, Clipboard, Monitor, DollarSign, FileText, CreditCard } from "lucide-react";
 
 const ADJUSTMENTS = [
-  { id: "officeSupplies", title: "A. Office Supplies Used", description: "Record office supplies consumed during the period.", icon: "📋" },
-  { id: "depreciation", title: "B. Depreciation on Office Equipment", description: "Record monthly depreciation expense for office equipment.", icon: "💻" },
-  { id: "unearnedRevenue", title: "C. Unearned Computer Service Revenue", description: "Recognize revenue from advance payments.", icon: "💰" },
-  { id: "accruedRevenue", title: "D. Accrued Computer Service Revenue", description: "Record revenue earned but not yet collected.", icon: "📄" },
-  { id: "paidSalaries", title: "E. Paid Salaries", description: "Record salary payments (expense or liability settlement).", icon: "💵" },
-  { id: "servicesCash", title: "F. Computer Services Rendered for Cash", description: "Record cash received for services provided.", icon: "🖥️" },
+  { id: "officeSupplies", title: "A. Office Supplies Used", description: "Record office supplies consumed during the period.", icon: "Clipboard" },
+  { id: "depreciation", title: "B. Depreciation on Office Equipment", description: "Record monthly depreciation expense for office equipment.", icon: "Monitor" },
+  { id: "unearnedRevenue", title: "C. Unearned Computer Service Revenue", description: "Recognize revenue from advance payments.", icon: "DollarSign" },
+  { id: "accruedRevenue", title: "D. Accrued Computer Service Revenue", description: "Record revenue earned but not yet collected.", icon: "FileText" },
+  { id: "paidSalaries", title: "E. Paid Salaries", description: "Record salary payments (expense or liability settlement).", icon: "CreditCard" },
+  { id: "servicesCash", title: "F. Computer Services Rendered for Cash", description: "Record cash received for services provided.", icon: "Monitor" },
 ];
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  Clipboard,
+  Monitor,
+  DollarSign,
+  FileText,
+  CreditCard,
+};
+
+function AdjustmentIcon({ iconName }: { iconName: string }) {
+  const Icon = ICON_MAP[iconName];
+  return <Icon className="text-[#A9C4A1]" />;
+}
 
 function onlyDigitsAndDots(value: string): string {
   return value.replace(/[^0-9.]/g, "");
@@ -159,10 +172,10 @@ export default function AdjustingEntriesPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-[#F3F4F6]">
             Adjusting Entries Practice
           </h1>
-          <p className="text-slate-600 mt-1">
+          <p className="text-[#A1A1AA] mt-1">
             Practice journalizing the required adjustments for AAA Computer
             Services. Select an adjustment below to begin.
           </p>
@@ -172,14 +185,16 @@ export default function AdjustingEntriesPage() {
           {ADJUSTMENTS.map((adj) => (
             <div
               key={adj.id}
-              className="bg-white rounded-lg border border-slate-200 p-5 hover:bg-slate-50 transition-colors cursor-pointer group"
+              className="bg-[#1E1E1E] rounded-lg border border-[#303030] p-5 hover:bg-[#303030]/30 transition-colors cursor-pointer group"
               onClick={() => startAdjustment(adj.id)}
             >
-              <div className="text-2xl mb-3">{adj.icon}</div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">
+              <div className="text-2xl mb-3">
+                <AdjustmentIcon iconName={adj.icon} />
+              </div>
+              <h3 className="text-lg font-bold text-[#F3F4F6] mb-2">
                 {adj.title}
               </h3>
-              <p className="text-sm text-slate-600">{adj.description}</p>
+              <p className="text-[#A1A1AA] text-sm">{adj.description}</p>
             </div>
           ))}
         </div>
@@ -190,7 +205,7 @@ export default function AdjustingEntriesPage() {
   const adj = ADJUSTMENTS.find((a) => a.id === activeAdjustment);
 
   if (!adj) {
-    return <div>Adjustment not found</div>;
+    return <div className="text-[#F3F4F6]">Adjustment not found</div>;
   }
 
   return (
@@ -199,25 +214,25 @@ export default function AdjustingEntriesPage() {
         <div>
           <button
             onClick={() => setActiveAdjustment(null)}
-            className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 mb-4"
+            className="inline-flex items-center gap-2 text-sm text-[#A1A1AA] hover:text-[#A9C4A1] mb-4"
           >
             ← Back to adjustments
           </button>
-          <h1 className="text-2xl font-bold text-slate-900">{adj.title}</h1>
-          <p className="text-slate-600 mt-1">{adj.description}</p>
+          <h1 className="text-2xl font-bold text-[#F3F4F6]">{adj.title}</h1>
+          <p className="text-[#A1A1AA] mt-1">{adj.description}</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-slate-200 p-6 max-w-3xl">
+      <div className="bg-[#1E1E1E] rounded-lg border border-[#303030] p-6 max-w-3xl">
         <div className="space-y-6">
           {activeAdjustment === "officeSupplies" && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                   Office Supplies Used (₱)
                 </label>
                 <div className="input-group flex items-center">
-                  <span className="px-3 py-2 bg-slate-100 border-r-0 border-slate-300 rounded-l-lg text-slate-700">
+                  <span className="px-3 py-2 bg-[#141414] border-r-0 border-[#303030] rounded-l-lg text-[#A1A1AA]">
                     ₱
                   </span>
                   <input
@@ -225,40 +240,39 @@ export default function AdjustingEntriesPage() {
                     value={aAmount}
                     onChange={(e) => setAAmount(onlyDigitsAndDots(e.target.value))}
                     placeholder="500"
-                    className="flex-1 px-3 py-2 border border-slate-300 rounded-r-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                    className="flex-1 px-3 py-2 border border-[#303030] rounded-r-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                   />
                 </div>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-[#A1A1AA]/50 mt-1">
                   Enter the amount of office supplies consumed during the period.
                 </p>
               </div>
               <div className="flex gap-2">
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-[#A1A1AA] mb-1">
                   Date
                 </label>
                 <input
                   type="date"
                   value={formDate}
                   onChange={(e) => setFormDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 />
               </div>
               <button
                 onClick={() => calculateAdjustment("officeSupplies")}
                 disabled={!aAmount || parseFloat(aAmount) <= 0}
-                className="w-full px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-[#4A4E69] text-[#A9C4A1] font-semibold rounded-lg hover:bg-[#5A5E79] disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
               >
                 <Calculator className="w-4 h-4" />
                 Calculate Entry
               </button>
             </div>
           )}
-
           {activeAdjustment === "depreciation" && (
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                     Equipment Cost (₱)
                   </label>
                   <input
@@ -266,11 +280,11 @@ export default function AdjustingEntriesPage() {
                     value={bCost}
                     onChange={(e) => setBCost(onlyDigitsAndDots(e.target.value))}
                     placeholder="15000"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                    className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                     Salvage Rate (%)
                   </label>
                   <input
@@ -278,13 +292,13 @@ export default function AdjustingEntriesPage() {
                     value={bSalvageRate}
                     onChange={(e) => setBSalvageRate(onlyDigitsAndDots(e.target.value))}
                     placeholder="5"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                    className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                     Useful Life (years)
                   </label>
                   <input
@@ -292,11 +306,11 @@ export default function AdjustingEntriesPage() {
                     value={bUsefulLife}
                     onChange={(e) => setBUsefulLife(onlyDigits(e.target.value))}
                     placeholder="5"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                    className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                     Accum. Depreciation (₱)
                   </label>
                   <input
@@ -304,75 +318,74 @@ export default function AdjustingEntriesPage() {
                     value={bAccumulated}
                     onChange={(e) => setBAccumulated(onlyDigitsAndDots(e.target.value))}
                     placeholder="0"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                    className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                   />
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-[#A1A1AA]/50 mt-1">
                     Prior depreciation already recorded (if any).
                   </p>
                 </div>
               </div>
               <div className="flex gap-2">
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-[#A1A1AA] mb-1">
                   Date
                 </label>
                 <input
                   type="date"
                   value={formDate}
                   onChange={(e) => setFormDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 />
               </div>
               <button
                 onClick={() => calculateAdjustment("depreciation")}
                 disabled={!bCost || parseFloat(bCost) <= 0}
-                className="w-full px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-[#4A4E69] text-[#A9C4A1] font-semibold rounded-lg hover:bg-[#5A5E79] disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
               >
                 <Calculator className="w-4 h-4" />
                 Calculate Depreciation
               </button>
             </div>
           )}
-
           {activeAdjustment === "unearnedRevenue" && (
             <div className="space-y-4">
-              <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                <p className="text-sm text-slate-600 mb-3">
+              <div className="bg-[#141414] rounded-lg p-4 border border-[#303030]">
+                <p className="text-[#A1A1AA] text-sm mb-3">
                   Choose how you want to handle the unearned revenue:
                 </p>
                 <div className="space-y-3">
-                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-blue-50 border-transparent hover:border-blue-100">
+                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-[#4A4E69]/10 border-transparent hover:border-[#4A4E69]/30">
                     <input
                       type="radio"
                       name="cOption"
                       value="earned"
                       checked={cOption === "earned"}
                       onChange={() => setCOption("earned")}
-                      className="w-4 h-4 text-blue-600"
+                      className="w-4 h-4 text-[#A9C4A1]"
                     />
                     <div>
-                      <span className="font-medium text-slate-900">
+                      <span className="font-medium text-[#F3F4F6]">
                         ₱1,000 has been earned
                       </span>
-                      <p className="text-xs text-slate-500 mt-1">
+                      <p className="text-xs text-[#A1A1AA]/50 mt-1">
                         Record the earned portion as revenue. Debit Unearned
                         Revenue, Credit Computer Service Revenue.
                       </p>
                     </div>
                   </label>
-                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-blue-50 border-transparent hover:border-blue-100">
+                  <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-[#4A4E69]/10 border-transparent hover:border-[#4A4E69]/30">
                     <input
                       type="radio"
                       name="cOption"
                       value="endingBalance"
                       checked={cOption === "endingBalance"}
                       onChange={() => setCOption("endingBalance")}
-                      className="w-4 h-4 text-blue-600"
+                      className="w-4 h-4 text-[#A9C4A1]"
                     />
                     <div>
-                      <span className="font-medium text-slate-900">
+                      <span className="font-medium text-[#F3F4F6]">
                         Ending unearned balance is a specific amount
                       </span>
-                      <p className="text-xs text-slate-500 mt-1">
+                      <p className="text-xs text-[#A1A1AA]/50 mt-1">
                         Calculate the adjustment needed to reach a target ending
                         balance.
                       </p>
@@ -383,7 +396,7 @@ export default function AdjustingEntriesPage() {
 
               {cOption === "earned" && (
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                     Amount Earned (₱)
                   </label>
                   <input
@@ -391,7 +404,7 @@ export default function AdjustingEntriesPage() {
                     value={cEarnedAmount}
                     onChange={(e) => setCEarnedAmount(onlyDigitsAndDots(e.target.value))}
                     placeholder="1000"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                    className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                   />
                 </div>
               )}
@@ -399,7 +412,7 @@ export default function AdjustingEntriesPage() {
               {cOption === "endingBalance" && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                       Existing Unearned Balance (₱)
                     </label>
                     <input
@@ -407,11 +420,11 @@ export default function AdjustingEntriesPage() {
                       value={cExistingBalance}
                       onChange={(e) => setCExistingBalance(onlyDigitsAndDots(e.target.value))}
                       placeholder="2000"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                      className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                       Target Ending Balance (₱)
                     </label>
                     <input
@@ -419,37 +432,36 @@ export default function AdjustingEntriesPage() {
                       value={cTargetEnding}
                       onChange={(e) => setCTargetEnding(onlyDigitsAndDots(e.target.value))}
                       placeholder="1000"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                      className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                     />
                   </div>
                 </div>
               )}
 
               <div className="flex gap-2">
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-[#A1A1AA] mb-1">
                   Date
                 </label>
                 <input
                   type="date"
                   value={formDate}
                   onChange={(e) => setFormDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 />
               </div>
               <button
                 onClick={() => calculateAdjustment("unearnedRevenue")}
-                className="w-full px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-[#4A4E69] text-[#A9C4A1] font-semibold rounded-lg hover:bg-[#5A5E79] transition-colors flex items-center justify-center gap-2"
               >
                 <Calculator className="w-4 h-4" />
                 Calculate Entry
               </button>
             </div>
           )}
-
           {activeAdjustment === "accruedRevenue" && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                   Accrued Revenue Amount (₱)
                 </label>
                 <input
@@ -457,35 +469,34 @@ export default function AdjustingEntriesPage() {
                   value={dAmount}
                   onChange={(e) => setDAmount(onlyDigitsAndDots(e.target.value))}
                   placeholder="7500"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                 />
               </div>
               <div className="flex gap-2">
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-[#A1A1AA] mb-1">
                   Date
                 </label>
                 <input
                   type="date"
                   value={formDate}
                   onChange={(e) => setFormDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 />
               </div>
               <button
                 onClick={() => calculateAdjustment("accruedRevenue")}
                 disabled={!dAmount || parseFloat(dAmount) <= 0}
-                className="w-full px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-[#4A4E69] text-[#A9C4A1] font-semibold rounded-lg hover:bg-[#5A5E79] disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
               >
                 <Calculator className="w-4 h-4" />
                 Calculate Entry
               </button>
             </div>
           )}
-
           {activeAdjustment === "paidSalaries" && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                   Salary Amount (₱)
                 </label>
                 <input
@@ -493,72 +504,71 @@ export default function AdjustingEntriesPage() {
                   value={eAmount}
                   onChange={(e) => setEAmount(onlyDigitsAndDots(e.target.value))}
                   placeholder="Enter amount"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                   Payment Type
                 </label>
                 <div className="grid grid-cols-2 gap-4">
-                  <label className="p-3 border rounded-lg cursor-pointer hover:bg-blue-50 border-transparent hover:border-blue-100 flex items-center gap-2">
+                  <label className="p-3 border rounded-lg cursor-pointer hover:bg-[#4A4E69]/10 border-transparent hover:border-[#4A4E69]/30 flex items-center gap-2">
                     <input
                       type="radio"
                       name="eSalaryType"
                       value="expense"
                       checked={eSalaryType === "expense"}
                       onChange={() => setESalaryType("expense")}
-                      className="w-4 h-4 text-blue-600"
+                      className="w-4 h-4 text-[#A9C4A1]"
                     />
-                    <span className="text-sm text-slate-700">
+                    <span className="text-sm text-[#F3F4F6]">
                       Expense (paid immediately)
                     </span>
                   </label>
-                  <label className="p-3 border rounded-lg cursor-pointer hover:bg-blue-50 border-transparent hover:border-blue-100 flex items-center gap-2">
+                  <label className="p-3 border rounded-lg cursor-pointer hover:bg-[#4A4E69]/10 border-transparent hover:border-[#4A4E69]/30 flex items-center gap-2">
                     <input
                       type="radio"
                       name="eSalaryType"
                       value="payable"
                       checked={eSalaryType === "payable"}
                       onChange={() => setESalaryType("payable")}
-                      className="w-4 h-4 text-blue-600"
+                      className="w-4 h-4 text-[#A9C4A1]"
                     />
-                    <span className="text-sm text-slate-700">
+                    <span className="text-sm text-[#F3F4F6]">
                       Payable (settling liability)
                     </span>
                   </label>
                 </div>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-[#A1A1AA]/50 mt-1">
                   Expense: salary earned and paid now. Payable: paying a
                   previously accrued salary liability.
                 </p>
               </div>
               <div className="flex gap-2">
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-[#A1A1AA] mb-1">
                   Date
                 </label>
                 <input
                   type="date"
                   value={formDate}
                   onChange={(e) => setFormDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 />
               </div>
               <button
                 onClick={() => calculateAdjustment("paidSalaries")}
                 disabled={!eAmount || parseFloat(eAmount) <= 0}
-                className="w-full px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-[#4A4E69] text-[#A9C4A1] font-semibold rounded-lg hover:bg-[#5A5E79] disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
               >
                 <Calculator className="w-4 h-4" />
                 Calculate Entry
               </button>
             </div>
           )}
-
           {activeAdjustment === "servicesCash" && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[#A1A1AA] mb-2">
                   Cash Received for Services (₱)
                 </label>
                 <input
@@ -566,24 +576,24 @@ export default function AdjustingEntriesPage() {
                   value={fAmount}
                   onChange={(e) => setFAmount(onlyDigitsAndDots(e.target.value))}
                   placeholder="25000"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right font-mono"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-right font-mono bg-[#111111] text-[#F3F4F6]"
                 />
               </div>
               <div className="flex gap-2">
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-medium text-[#A1A1AA] mb-1">
                   Date
                 </label>
                 <input
                   type="date"
                   value={formDate}
                   onChange={(e) => setFormDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 />
               </div>
               <button
                 onClick={() => calculateAdjustment("servicesCash")}
                 disabled={!fAmount || parseFloat(fAmount) <= 0}
-                className="w-full px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-[#4A4E69] text-[#A9C4A1] font-semibold rounded-lg hover:bg-[#5A5E79] disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
               >
                 <Calculator className="w-4 h-4" />
                 Calculate Entry
@@ -594,44 +604,44 @@ export default function AdjustingEntriesPage() {
       </div>
 
       {calcError && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-3">
+        <div className="p-4 rounded-lg border border-[#4A4E69]/30 bg-[#4A4E69]/10 text-[#A9C4A1] text-sm flex items-center gap-3">
           <AlertCircle className="w-5 h-5" />
           {calcError}
         </div>
       )}
 
       {calcResult && (
-        <div className="bg-white rounded-lg border border-slate-200 p-6 max-w-3xl">
+        <div className="bg-[#1E1E1E] rounded-lg border border-[#303030] p-6 max-w-3xl">
           <div className="flex justify-between items-start mb-6">
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg font-bold text-[#F3F4F6]">
               Calculated Entry
             </h2>
-            <span className="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-1 rounded">
+            <span className="text-xs font-mono text-[#A1A1AA]/50 bg-[#141414] px-2 py-1 rounded border border-[#303030]">
               Balanced: {calcResult.balanced ? "Yes" : "No"}
             </span>
           </div>
 
           {calcResult.explanation && (
-            <div className="bg-blue-50 rounded-lg border border-blue-200 p-4 mb-6">
-              <h3 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-2">
+            <div className="bg-[#4A4E69]/20 rounded-lg border border-[#4A4E69]/30 p-4 mb-6">
+              <h3 className="text-sm font-semibold text-[#A9C4A1] mb-2 flex items-center gap-2">
                 <Info className="w-4 h-4" />
                 Why this entry?
               </h3>
-              <p className="text-sm text-blue-800">{calcResult.explanation}</p>
+              <p className="text-[#A1A1AA] text-sm">{calcResult.explanation}</p>
             </div>
           )}
 
           {calcResult.calculation && (
-            <div className="bg-slate-50 rounded-lg border border-slate-200 p-4 mb-6">
-              <h3 className="text-sm font-semibold text-slate-900 mb-3">
+            <div className="bg-[#141414] rounded-lg border border-[#303030] p-4 mb-6">
+              <h3 className="text-sm font-semibold text-[#F3F4F6] mb-3">
                 Calculation
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 {Object.entries(calcResult.calculation as Record<string, string>).map(
                   ([key, value]) => (
                     <div key={key} className="flex justify-between">
-                      <span className="text-slate-500">{key}</span>
-                      <span className="font-mono text-slate-800">{value}</span>
+                      <span className="text-[#A1A1AA]/50">{key}</span>
+                      <span className="font-mono text-[#F3F4F6]">{value}</span>
                     </div>
                   )
                 )}
@@ -640,7 +650,7 @@ export default function AdjustingEntriesPage() {
           )}
 
           {calcResult.warning && (
-            <div className="p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-sm mb-6">
+            <div className="p-4 rounded-lg border border-[#FBBF24]/30 bg-[#FBBF24]/10 text-[#FBBF24] text-sm mb-6">
               <p className="font-semibold mb-1">Review needed:</p>
               <p>{calcResult.explanation}</p>
             </div>
@@ -648,33 +658,33 @@ export default function AdjustingEntriesPage() {
 
           {calcResult.entry && (
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-slate-900 mb-2">
+              <h3 className="text-sm font-semibold text-[#F3F4F6] mb-2">
                 Journal Entry Preview
               </h3>
-              <table className="w-full text-sm border border-slate-200">
-                <thead className="bg-slate-50">
+              <table className="w-full text-sm border border-[#303030]">
+                <thead className="bg-[#141414]">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs text-slate-500">
+                    <th className="px-4 py-2 text-left text-xs text-[#A1A1AA]/50">
                       Account No.
                     </th>
-                    <th className="px-4 py-2 text-left text-xs text-slate-500">
+                    <th className="px-4 py-2 text-left text-xs text-[#A1A1AA]/50">
                       Account Name
                     </th>
-                    <th className="px-4 py-2 text-right text-xs text-slate-500">
+                    <th className="px-4 py-2 text-right text-xs text-[#A1A1AA]/50">
                       Debit (₱)
                     </th>
-                    <th className="px-4 py-2 text-right text-xs text-slate-500">
+                    <th className="px-4 py-2 text-right text-xs text-[#A1A1AA]/50">
                       Credit (₱)
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-[#303030]">
                   {calcResult.entry.lines.map((l: any, i: number) => (
                     <tr key={i}>
-                      <td className="px-4 py-2 font-mono text-slate-700">
+                      <td className="px-4 py-2 font-mono text-[#A1A1AA]">
                         {l.accountNo}
                       </td>
-                      <td className="px-4 py-2 text-slate-800">
+                      <td className="px-4 py-2 text-[#F3F4F6]">
                         {l.accountNo === "101"
                           ? "Cash"
                           : l.accountNo === "102"
@@ -711,7 +721,7 @@ export default function AdjustingEntriesPage() {
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-slate-50 font-bold">
+                  <tr className="bg-[#141414] font-bold">
                     <td colSpan={2} className="px-4 py-2 text-right">
                       Totals:
                     </td>
@@ -730,7 +740,7 @@ export default function AdjustingEntriesPage() {
           {!calcResult.entry &&
             calcResult.option === "endingBalance" &&
             calcResult.adjustmentNeeded === "0.00" && (
-              <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm">
+              <div className="p-4 rounded-lg border border-[#10B981]/30 bg-[#10B981]/10 text-[#34D399] text-sm">
                 No adjustment needed. The existing balance already equals the target ending balance.
               </div>
             )}
@@ -740,7 +750,7 @@ export default function AdjustingEntriesPage() {
               <button
                 onClick={() => postAdjustment(calcResult)}
                 disabled={posting}
-                className="w-full px-4 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                className="w-full px-4 py-3 bg-[#10B981] text-[#064E3B] font-bold rounded-lg hover:bg-[#34D399] disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
               >
                 <Save className="w-4 h-4" />
                 {posting ? "Posting..." : "Post This Adjusting Entry"}
@@ -751,14 +761,14 @@ export default function AdjustingEntriesPage() {
       )}
 
       {postSuccess && (
-        <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm flex items-center gap-3">
+        <div className="p-4 rounded-lg border border-[#10B981]/30 bg-[#10B981]/10 text-[#34D399] text-sm flex items-center gap-3">
           <CheckCircle className="w-5 h-5" />
           {postSuccess}
         </div>
       )}
 
       {postError && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+        <div className="p-4 rounded-lg border border-[#4A4E69]/30 bg-[#4A4E69]/10 text-[#A9C4A1] text-sm">
           {postError}
         </div>
       )}

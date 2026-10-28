@@ -36,6 +36,16 @@ const CLASSIFICATION_LABELS: Record<string, string> = {
   EXPENSE: "Expense",
 };
 
+const CLASSIFICATION_STYLES: Record<string, { bg: string; text: string; border: string }> = {
+  ASSET: { bg: "bg-[#4A4E69]/20", text: "text-[#A9C4A1]", border: "border-[#4A4E69]/30" },
+  CONTRA_ASSET: { bg: "bg-[#303030]", text: "text-[#A1A1AA]", border: "border-[#303030]" },
+  LIABILITY: { bg: "bg-[#7C3AED]/20", text: "text-[#C4B5FD]", border: "border-[#7C3AED]/30" },
+  OWNERS_EQUITY: { bg: "bg-[#A9C4A1]/20", text: "text-[#A9C4A1]", border: "border-[#A9C4A1]/30" },
+  CONTRA_EQUITY: { bg: "bg-[#DB2777]/20", text: "text-[#F472B6]", border: "border-[#DB2777]/30" },
+  REVENUE: { bg: "bg-[#10B981]/20", text: "text-[#34D399]", border: "border-[#10B981]/30" },
+  EXPENSE: { bg: "bg-[#EF4444]/20", text: "text-[#F87171]", border: "border-[#EF4444]/30" },
+};
+
 export default function AccountsPage() {
   const { user } = useAuth();
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -156,10 +166,10 @@ export default function AccountsPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-[#F3F4F6]">
             Chart of Accounts
           </h1>
-          <p className="text-slate-600 mt-1">
+          <p className="text-[#A1A1AA] mt-1">
             All accounts and their current balances from posted entries.
           </p>
         </div>
@@ -169,7 +179,7 @@ export default function AccountsPage() {
               setEditingId(null);
               setShowForm(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[#4A4E69] text-[#A9C4A1] rounded-lg hover:bg-[#5A5E79] text-sm font-medium transition-colors"
           >
             <Plus className="w-4 h-4" /> Add Account
           </button>
@@ -177,23 +187,23 @@ export default function AccountsPage() {
       </div>
 
       {error && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+        <div className="p-4 rounded-lg border border-[#4A4E69]/30 bg-[#4A4E69]/10 text-[#A9C4A1] text-sm">
           {error}
         </div>
       )}
 
       <div className="flex items-center gap-2 mb-4">
-        <Search className="w-4 h-4 text-slate-400" />
+        <Search className="w-4 h-4 text-[#A1A1AA]/50" />
         <input
           type="text"
           placeholder="Filter accounts by number or name..."
-          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+          className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-sm bg-[#111111] text-[#F3F4F6] placeholder-[#A1A1AA]/50"
         />
       </div>
 
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+      <div className="bg-[#1E1E1E] rounded-lg border border-[#303030] overflow-hidden">
         <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 text-slate-500 uppercase text-xs">
+          <thead className="bg-[#141414] text-[#A1A1AA]/60 uppercase text-xs">
             <tr>
               <th className="px-4 py-3 font-medium">Account No.</th>
               <th className="px-4 py-3 font-medium">Account Name</th>
@@ -212,105 +222,92 @@ export default function AccountsPage() {
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-[#303030]">
             {loading ? (
               <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-500">
+                <td colSpan={7} className="p-8 text-center text-[#A1A1AA]/50">
                   Loading accounts...
                 </td>
               </tr>
             ) : accounts.length === 0 ? (
               <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-500">
+                <td colSpan={7} className="p-8 text-center text-[#A1A1AA]/50">
                   No accounts found. Add accounts to get started.
                 </td>
               </tr>
             ) : (
-              accounts.map((acc) => (
-                <tr
-                  key={acc.id}
-                  className="hover:bg-slate-50 transition-colors"
-                >
-                  <td className="px-4 py-3 font-mono text-slate-700">
-                    {acc.accountNo}
-                  </td>
-                  <td className="px-4 py-3 text-slate-800 font-medium">
-                    {acc.name}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${
-                      acc.classification === "ASSET"
-                        ? "bg-blue-100 text-blue-700 border-blue-100"
-                        : acc.classification === "CONTRA_ASSET"
-                        ? "bg-slate-100 text-slate-700 border-slate-200"
-                        : acc.classification === "LIABILITY"
-                        ? "bg-orange-100 text-orange-700 border-orange-100"
-                        : acc.classification === "OWNERS_EQUITY"
-                        ? "bg-purple-100 text-purple-700 border-purple-100"
-                        : acc.classification === "CONTRA_EQUITY"
-                        ? "bg-pink-100 text-pink-700 border-pink-100"
-                        : acc.classification === "REVENUE"
-                        ? "bg-emerald-100 text-emerald-700 border-emerald-100"
-                        : "bg-rose-100 text-rose-700 border-rose-100"
-                    }`}
-                    >
-                      {CLASSIFICATION_LABELS[acc.classification] ||
-                        acc.classification}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono text-slate-700">
-                    {acc.normalBalance === "DEBIT" ? "Debit" : "Credit"}
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono">
-                    {parseFloat(acc.debitBalance) > 0
-                      ? acc.debitBalance
-                      : "—"}
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono">
-                    {parseFloat(acc.creditBalance) > 0
-                      ? acc.creditBalance
-                      : "—"}
-                  </td>
-                  {isAdmin && (
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center gap-2 justify-end">
-                        <button
-                          onClick={() => startEdit(acc)}
-                          className="text-slate-600 hover:text-blue-600 p-1.5"
-                          title="Edit account"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => deleteAccount(acc.id, acc.accountNo)}
-                          className="text-slate-600 hover:text-red-600 p-1.5"
-                          title="Delete account"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
+              accounts.map((acc) => {
+                const style = CLASSIFICATION_STYLES[acc.classification] || CLASSIFICATION_STYLES.EXPENSE;
+                return (
+                  <tr
+                    key={acc.id}
+                    className="hover:bg-[#303030]/30 transition-colors"
+                  >
+                    <td className="px-4 py-3 font-mono text-[#F3F4F6]">
+                      {acc.accountNo}
                     </td>
-                  )}
-                </tr>
-              ))
+                    <td className="px-4 py-3 text-[#F3F4F6] font-medium">
+                      {acc.name}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${style.border} ${style.bg} ${style.text}`}>
+                        {CLASSIFICATION_LABELS[acc.classification] || acc.classification}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-[#F3F4F6]">
+                      {acc.normalBalance === "DEBIT" ? "Debit" : "Credit"}
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-[#F3F4F6]">
+                      {parseFloat(acc.debitBalance) > 0
+                        ? acc.debitBalance
+                        : "—"}
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-[#F3F4F6]">
+                      {parseFloat(acc.creditBalance) > 0
+                        ? acc.creditBalance
+                        : "—"}
+                    </td>
+                    {isAdmin && (
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex items-center gap-2 justify-end">
+                          <button
+                            onClick={() => startEdit(acc)}
+                            className="text-[#A1A1AA] hover:text-[#A9C4A1] p-1.5"
+                            title="Edit account"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => deleteAccount(acc.id, acc.accountNo)}
+                            className="text-[#A1A1AA] hover:text-[#F87171] p-1.5"
+                            title="Delete account"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    )}
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
 
       {showForm && (
-        <div className="bg-white rounded-lg border border-slate-200 p-6 max-w-md">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">
+        <div className="bg-[#1E1E1E] rounded-lg border border-[#303030] p-6 max-w-md">
+          <h2 className="text-lg font-semibold text-[#F3F4F6] mb-4">
             {editingId ? "Edit Account" : "Add New Account"}
           </h2>
           {formError && (
-            <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+            <div className="mb-4 p-3 rounded-lg border border-[#4A4E69]/30 bg-[#4A4E69]/10 text-[#A9C4A1] text-sm">
               {formError}
             </div>
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-[#A1A1AA] mb-1">
                 Account Number
               </label>
               <input
@@ -318,16 +315,16 @@ export default function AccountsPage() {
                 value={formAccountNo}
                 onChange={(e) => setFormAccountNo(e.target.value)}
                 placeholder="e.g. 101"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 required
               />
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-[#A1A1AA]/50 mt-1">
                 Unique number for this account (e.g. 101 for Cash).
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-[#A1A1AA] mb-1">
                 Account Name
               </label>
               <input
@@ -335,14 +332,14 @@ export default function AccountsPage() {
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 placeholder="e.g. Cash, Accounts Receivable"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 required
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-[#A1A1AA] mb-1">
                   Classification
                 </label>
                 <select
@@ -350,25 +347,19 @@ export default function AccountsPage() {
                   onChange={(e) =>
                     setFormClassification(e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 >
                   <option value="ASSET">Asset</option>
-                  <option value="CONTRA_ASSET">
-                    Contra-Asset
-                  </option>
+                  <option value="CONTRA_ASSET">Contra-Asset</option>
                   <option value="LIABILITY">Liability</option>
-                  <option value="OWNERS_EQUITY">
-                    Owner's Equity
-                  </option>
-                  <option value="CONTRA_EQUITY">
-                    Contra-Equity
-                  </option>
+                  <option value="OWNERS_EQUITY">Owner's Equity</option>
+                  <option value="CONTRA_EQUITY">Contra-Equity</option>
                   <option value="REVENUE">Revenue</option>
                   <option value="EXPENSE">Expense</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium text-[#A1A1AA] mb-1">
                   Normal Balance
                 </label>
                 <select
@@ -376,19 +367,19 @@ export default function AccountsPage() {
                   onChange={(e) =>
                     setFormNormalBalance(e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
                 >
                   <option value="DEBIT">Debit</option>
                   <option value="CREDIT">Credit</option>
                 </select>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-[#A1A1AA]/50 mt-1">
                   The side where increases are recorded.
                 </p>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-[#A1A1AA] mb-1">
                 Description (optional)
               </label>
               <input
@@ -396,7 +387,7 @@ export default function AccountsPage() {
                 value={formDescription}
                 onChange={(e) => setFormDescription(e.target.value)}
                 placeholder="e.g. Cash on hand and in bank"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none bg-[#111111] text-[#F3F4F6]"
               />
             </div>
 
@@ -408,13 +399,13 @@ export default function AccountsPage() {
                   setEditingId(null);
                   resetForm();
                 }}
-                className="px-4 py-2 text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+                className="px-4 py-2 text-[#A1A1AA] bg-[#1E1E1E] rounded-lg hover:bg-[#303030] transition-colors border border-[#303030]"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-[#4A4E69] text-[#A9C4A1] rounded-lg hover:bg-[#5A5E79] transition-colors"
               >
                 {editingId ? "Save Changes" : "Add Account"}
               </button>
@@ -423,11 +414,11 @@ export default function AccountsPage() {
         </div>
       )}
 
-      <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
-        <h3 className="text-sm font-semibold text-blue-900 mb-2">
+      <div className="bg-[#4A4E69]/20 rounded-lg border border-[#4A4E69]/30 p-4">
+        <h3 className="text-sm font-semibold text-[#A9C4A1] mb-2">
           How balances work
         </h3>
-        <ul className="text-sm text-blue-800 space-y-1 list-disc pl-5">
+        <ul className="text-[#A1A1AA] text-sm space-y-1 list-disc pl-5">
           <li>
             Balances are calculated from posted journal entries only. Drafts
             are excluded.

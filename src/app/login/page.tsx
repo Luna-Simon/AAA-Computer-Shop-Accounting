@@ -32,8 +32,6 @@ export default function LoginPage() {
         return;
       }
 
-      // Set the session cookie - the server sets it via the response
-      // We need to handle this carefully with fetch cookies
       router.push("/dashboard");
       router.refresh();
     } catch (err: any) {
@@ -43,18 +41,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+    <div className="flex min-h-screen items-center justify-center bg-[#0D0D0D]">
+      <div className="w-full max-w-md p-6 bg-[#1E1E1E] rounded-xl border border-[#303030] shadow-lg">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-600 text-white mx-auto mb-4">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-[#4A4E69] text-[#A9C4A1] mx-auto mb-4">
             <LogIn className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Sign In</h1>
-          <p className="text-slate-600 mt-2">AAA Computer Services Accounting</p>
+          <h1 className="text-2xl font-bold text-[#F3F4F6]">Sign In</h1>
+          <p className="text-[#A1A1AA] mt-2">AAA Computer Services Accounting</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
+          <div className="mb-6 p-3 rounded-lg border border-[#4A4E69]/30 bg-[#4A4E69]/10 text-[#A9C4A1] text-sm flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" />
             {error}
           </div>
@@ -62,7 +60,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-[#A1A1AA] mb-1">
               Email address
             </label>
             <input
@@ -70,13 +68,13 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@example.com"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] focus:border-[#A9C4A1] outline-none transition-all bg-[#111111] text-[#F3F4F6] placeholder-[#A1A1AA]/50"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-[#A1A1AA] mb-1">
               Password
             </label>
             <input
@@ -84,7 +82,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] focus:border-[#A9C4A1] outline-none transition-all bg-[#111111] text-[#F3F4F6] placeholder-[#A1A1AA]/50"
               required
             />
           </div>
@@ -92,22 +90,20 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2.5 bg-[#4A4E69] text-[#A9C4A1] font-semibold rounded-lg hover:bg-[#5A5E79] disabled:opacity-50 transition-all focus:outline-none focus:ring-2 focus:ring-[#A9C4A1]"
           >
             {isLoading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-slate-200 text-center">
-          <p className="text-sm text-slate-600 mb-3">
-            Demo credentials:
-          </p>
-          <div className="text-xs text-slate-500 bg-slate-50 p-3 rounded inline-block border border-slate-200">
+        <div className="mt-8 pt-6 border-t border-[#303030] text-center">
+          <p className="text-sm text-[#A1A1AA] mb-3">Demo credentials:</p>
+          <div className="text-xs text-[#A1A1AA]/60 bg-[#111111] p-3 rounded inline-block border border-[#303030]">
             Email: admin@example.com<br />
             Password: (check .env ADMIN_PASSWORD or use "Admin123!")
           </div>
-          <p className="text-sm text-slate-600 mt-4">
-            First time? Set up your admin account in <code className="font-mono">.env</code> then seed the database.
+          <p className="text-sm text-[#A1A1AA] mt-4">
+            First time? Set up your admin account in <code className="font-mono text-[#A9C4A1]">.env</code> then seed the database.
           </p>
         </div>
       </div>

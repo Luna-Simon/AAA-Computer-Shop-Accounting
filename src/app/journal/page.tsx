@@ -67,25 +67,25 @@ export default function JournalPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-[#F3F4F6]">
             General Journal
           </h1>
-          <p className="text-slate-600 mt-1">
+          <p className="text-[#A1A1AA] mt-1">
             All journal entries in chronological order.
           </p>
         </div>
       </div>
 
       {error && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+        <div className="p-4 rounded-lg border border-[#4A4E69]/30 bg-[#4A4E69]/10 text-[#A9C4A1] text-sm">
           {error}
         </div>
       )}
 
-      <div className="bg-white rounded-lg border border-slate-200 p-6">
+      <div className="bg-[#1E1E1E] rounded-lg border border-[#303030] p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2 uppercase">
+            <label className="block text-xs font-medium text-[#A1A1AA]/50 mb-2 uppercase">
               Status
             </label>
             <select
@@ -93,7 +93,7 @@ export default function JournalPage() {
               onChange={(e) =>
                 setFilters({ ...filters, status: e.target.value })
               }
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white"
+              className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-sm bg-[#111111] text-[#F3F4F6]"
             >
               <option value="">All statuses</option>
               <option value="DRAFT">Draft</option>
@@ -101,7 +101,7 @@ export default function JournalPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2 uppercase">
+            <label className="block text-xs font-medium text-[#A1A1AA]/50 mb-2 uppercase">
               Account
             </label>
             <input
@@ -111,11 +111,11 @@ export default function JournalPage() {
               onChange={(e) =>
                 setFilters({ ...filters, accountNo: e.target.value })
               }
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+              className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-sm bg-[#111111] text-[#F3F4F6]"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2 uppercase">
+            <label className="block text-xs font-medium text-[#A1A1AA]/50 mb-2 uppercase">
               From date
             </label>
             <input
@@ -124,11 +124,11 @@ export default function JournalPage() {
               onChange={(e) =>
                 setFilters({ ...filters, startDate: e.target.value })
               }
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+              className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-sm bg-[#111111] text-[#F3F4F6]"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2 uppercase">
+            <label className="block text-xs font-medium text-[#A1A1AA]/50 mb-2 uppercase">
               To date
             </label>
             <input
@@ -137,14 +137,14 @@ export default function JournalPage() {
               onChange={(e) =>
                 setFilters({ ...filters, endDate: e.target.value })
               }
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+              className="w-full px-3 py-2 border border-[#303030] rounded-lg focus:ring-2 focus:ring-[#A9C4A1] outline-none text-sm bg-[#111111] text-[#F3F4F6]"
             />
           </div>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-xs">
+            <thead className="bg-[#141414] text-[#A1A1AA]/60 uppercase text-xs">
               <tr>
                 <th className="px-4 py-3 text-left">Date</th>
                 <th className="px-4 py-3 text-left">Ref No.</th>
@@ -155,16 +155,16 @@ export default function JournalPage() {
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-[#303030]">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-slate-500">
+                  <td colSpan={7} className="p-8 text-center text-[#A1A1AA]/50">
                     Loading entries...
                   </td>
                 </tr>
               ) : entries.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-slate-500">
+                  <td colSpan={7} className="p-8 text-center text-[#A1A1AA]/50">
                     No journal entries found.
                   </td>
                 </tr>
@@ -173,33 +173,33 @@ export default function JournalPage() {
                   const lineCount = entry.lines?.length || 0;
                   const statusColor =
                     entry.status === "POSTED"
-                      ? "text-emerald-600"
-                      : "text-amber-600";
+                      ? "text-[#34D399]"
+                      : "text-[#FBBF24]";
                   const typeColor =
                     entry.entryType === "REVERSAL"
-                      ? "text-purple-600"
-                      : "text-slate-600";
+                      ? "text-[#C4B5FD]"
+                      : "text-[#A1A1AA]";
                   return (
                     <tr
                       key={entry.id}
-                      className="hover:bg-slate-50 transition-colors group"
+                      className="hover:bg-[#303030]/30 transition-colors group"
                     >
-                      <td className="px-4 py-3 font-mono text-slate-700">
+                      <td className="px-4 py-3 font-mono text-[#A1A1AA]">
                         {new Date(entry.date).toLocaleDateString()}
                       </td>
-                      <td className="px-4 py-3 font-mono text-slate-700">
+                      <td className="px-4 py-3 font-mono text-[#A1A1AA]">
                         {entry.referenceNo || "—"}
                       </td>
-                      <td className="px-4 py-3 text-slate-800 truncate max-w-xs">
+                      <td className="px-4 py-3 text-[#F3F4F6] truncate max-w-xs">
                         {entry.description}
                       </td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${
                           entry.entryType === "REVERSAL"
-                            ? "bg-purple-100 text-purple-700 border-purple-100"
+                            ? "border-[#7C3AED]/30 bg-[#7C3AED]/20 text-[#C4B5FD]"
                             : entry.entryType === "ADJUSTING"
-                            ? "bg-blue-100 text-blue-700 border-blue-100"
-                            : "bg-slate-100 text-slate-600 border-slate-200"
+                            ? "border-[#4A4E69]/30 bg-[#4A4E69]/20 text-[#A9C4A1]"
+                            : "border-[#303030]/30 bg-[#303030] text-[#A1A1AA]"
                         }`}
                         >
                           {TYPE_LABELS[entry.entryType] || entry.entryType}
@@ -210,14 +210,14 @@ export default function JournalPage() {
                           {STATUS_LABELS[entry.status] || entry.status}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-right font-mono text-slate-700">
+                      <td className="px-4 py-3 text-right font-mono text-[#A1A1AA]">
                         {lineCount}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex items-center gap-1">
                           <a
                             href={`/journal/${entry.id}`}
-                            className="text-slate-600 hover:text-blue-600 p-1.5"
+                            className="text-[#A1A1AA] hover:text-[#A9C4A1] p-1.5"
                             title="View details"
                           >
                             <FileText className="w-4 h-4" />
@@ -225,7 +225,7 @@ export default function JournalPage() {
                           {entry.status === "POSTED" && !entry.reversedFromId && (
                             <a
                               href={`/journal/${entry.id}/reverse`}
-                              className="text-slate-600 hover:text-red-600 p-1.5"
+                              className="text-[#A1A1AA] hover:text-[#F87171] p-1.5"
                               title="Reverse entry"
                             >
                               <RotateCcw className="w-4 h-4" />
